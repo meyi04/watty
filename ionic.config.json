@@ -1,0 +1,7 @@
+{
+  "name": "wattpad-crud",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
