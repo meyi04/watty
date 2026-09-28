@@ -1,17 +1,164 @@
-<ion-header [translucent]="true">
+<ion-header class="app-header">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title><span class="brand-mark" aria-hidden="true">w.</span><span>Write</span></ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <main class="page-shell">
+    <div class="page-heading">
+      <p class="eyebrow">A little imagination goes a long way</p>
+      <h1>{{ editingId ? 'Make it even better.' : 'Your next chapter starts here.' }}</h1>
+      <p class="muted">Give your ideas a home. Write, shape, and share your story.</p>
+    </div>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    @if (error) { <div class="notice" role="alert">{{ error }}</div> }
+    @if (loading) {
+    <div class="empty-state">
+      <ion-spinner></ion-spinner>
+      <p>Opening your story...</p>
+    </div>
+    }
+
+    @if (!loading && !loadFailed) {
+    <div class="editor-layout">
+      <form class="panel editor-panel" (ngSubmit)="addStory()">
+
+        <section class="form-section" aria-labelledby="details-heading">
+          <div class="section-heading">
+            <h2 id="details-heading">1. Story details</h2>
+            <span class="muted small">* Required</span>
+          </div>
+          <p class="field-help">The essentials readers will see in your library.</p>
+
+          <div class="field-grid">
+            <ion-input mode="md" label="Story title *" labelPlacement="stacked" fill="outline"
+              placeholder="A memorable name" name="title" maxlength="120" [disabled]="busy"
+              [(ngModel)]="newStory.title">
+            </ion-input>
+
+            <ion-input mode="md" label="Author / pen name *" labelPlacement="stacked" fill="outline"
+              placeholder="Your pen name" name="author" maxlength="80" [disabled]="busy" [(ngModel)]="newStory.author">
+            </ion-input>
+
+            <!-- FIXED: select as a block element, alert interface is more stable -->
+            <!-- Genre trigger -->
+            <div class="select-wrap">
+              <ion-input mode="md" label="Genre" labelPlacement="stacked" fill="outline" readonly
+                [value]="newStory.genre" placeholder="Choose a genre" (click)="openPicker('genre')">
+                <ion-icon slot="end" name="chevron-down-outline"></ion-icon>
+              </ion-input>
+            </div>
+
+            <!-- Status trigger -->
+            <div class="select-wrap">
+              <ion-input mode="md" label="Story status" labelPlacement="stacked" fill="outline" readonly
+                [value]="newStory.status" placeholder="Choose status" (click)="openPicker('status')">
+                <ion-icon slot="end" name="chevron-down-outline"></ion-icon>
+              </ion-input>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section" aria-labelledby="synopsis-heading">
+          <div class="section-heading">
+            <h2 id="synopsis-heading">2. The introduction</h2>
+          </div>
+          <p class="field-help">Give readers a reason to turn the first page.</p>
+          <ion-textarea mode="md" label="Synopsis" labelPlacement="stacked" fill="outline"
+            placeholder="What is your story about?" name="description" rows="4" [autoGrow]="true" maxlength="2000"
+            [disabled]="busy" [(ngModel)]="newStory.description">
+          </ion-textarea>
+        </section>
+
+        <section class="form-section" aria-labelledby="manuscript-heading">
+          <div class="section-heading">
+            <h2 id="manuscript-heading">3. Your manuscript</h2>
+            <span class="muted small">{{ wordCount | number }} words</span>
+          </div>
+          <p class="field-help">Start your first chapter or continue your story.</p>
+          <ion-textarea mode="md" label="Story text" labelPlacement="stacked" fill="outline"
+            placeholder="It all began when..." name="content" rows="10" [autoGrow]="true" [disabled]="busy"
+            [(ngModel)]="newStory.content">
+          </ion-textarea>
+        </section>
+
+        <footer class="editor-footer">
+          <p class="field-help" aria-live="polite">
+            {{ busy ? 'Saving your story to the cloud. Keep this page open.' : 'Publish saves your story online. A draft
+            is saved only on this device.' }}
+          </p>
+          <div class="form-actions">
+            <ion-button type="submit" [disabled]="busy">
+              @if (busy) { <ion-spinner slot="start" name="crescent"></ion-spinner> }
+              @else { <ion-icon slot="start" name="paper-plane-outline"></ion-icon> }
+              {{ busy ? 'Saving to cloud...' : editingId ? 'Save changes' : 'Publish story' }}
+            </ion-button>
+            <ion-button fill="outline" type="button" (click)="saveDraft()">Save device draft</ion-button>
+            <ion-button fill="clear" color="medium" type="button" (click)="reset()" [disabled]="busy">Clear</ion-button>
+          </div>
+        </footer>
+      </form>
+
+      <aside>
+        <div class="panel preview-panel">
+          <p class="eyebrow">Cover preview</p>
+          <div class="book-preview" [style.background-color]="newStory.coverColor">
+            <span class="cover-genre">{{ newStory.genre }}</span>
+            <div class="cover-ornament" aria-hidden="true">&#10022;</div>
+            <h2>{{ newStory.title || 'Your story, beautifully told.' }}</h2>
+            <p>{{ newStory.author || 'YOUR PEN NAME' }}</p>
+          </div>
+          <h3>Cover color</h3>
+          <p class="muted small">Choose the look of your story.</p>
+          <div class="swatches">
+            @for (color of colors; track color) {
+            <button type="button" [style.background]="color" [class.selected]="newStory.coverColor === color"
+              [attr.aria-label]="'Cover color ' + color" [attr.aria-pressed]="newStory.coverColor === color"
+              [disabled]="busy" (click)="newStory.coverColor = color">
+            </button>
+            }
+          </div>
+        </div>
+
+        <div class="writing-note">
+          <ion-icon name="bulb-outline"></ion-icon>
+          <div>
+            <h3>Every story starts with a sentence.</h3>
+            <p>You can edit your published story anytime from the library.</p>
+          </div>
+        </div>
+
+        @if (draftAvailable) {
+        <ion-button expand="block" fill="outline" (click)="restoreDraft()" [disabled]="busy">
+          Restore device draft
+        </ion-button>
+        }
+      </aside>
+    </div>
+    }
+  </main>
+  @if (pickerOpen) {
+  <div class="picker-backdrop" (click)="cancelPicker()" aria-hidden="true"></div>
+  <div class="picker-dialog" role="dialog" aria-modal="true" aria-label="{{ pickerTitle }}">
+    <div class="picker-dialog-header">
+      <h3>{{ pickerTitle }}</h3>
+      <ion-button fill="clear" size="small" (click)="cancelPicker()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="picker-options" role="listbox" aria-label="{{ pickerTitle }}">
+      @for (option of pickerOptions; track option) {
+      <button type="button" class="picker-option" [class.selected-option]="pickerValue === option"
+        (click)="selectOption(option)">
+        <span>{{ option }}</span>
+        @if (pickerValue === option) {
+        <ion-icon name="checkmark-circle" color="warning"></ion-icon>
+        }
+      </button>
+      }
+    </div>
+  </div>
+  }
 </ion-content>

@@ -1,17 +1,101 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+<ion-header class="app-header"><ion-toolbar><ion-title><span class="brand-mark"
+        aria-hidden="true">w.</span><span>Insights</span></ion-title><ion-buttons slot="end"><ion-button
+        routerLink="/tabs/tab1" aria-label="Keep writing"><ion-icon slot="start" name="create-outline"
+          aria-hidden="true"></ion-icon><span class="header-action-label">Keep
+          writing</span></ion-button></ion-buttons></ion-toolbar></ion-header>
+<ion-content>
+  <main class="page-shell">
+    <div class="page-heading">
+      <p class="eyebrow">Small beginnings. Endless possibilities.</p>
+      <h1>Your stories, at a glance.</h1>
+      <p class="muted">A live overview of the stories in your library.</p>
+    </div>
+    <section class="account-strip panel" aria-label="Your account">
+      <div>
+        <p class="eyebrow">Your private library</p><strong>{{ auth.user()?.email }}</strong>
+        <p class="muted small">Stories are saved to your account across devices.</p>
+      </div>
+      <ion-button fill="outline" [disabled]="signingOut" (click)="signOut()">{{ signingOut ? 'Signing out...' : 'Sign
+        out' }}</ion-button>
+    </section>
+    @if (accountError) { <div class="notice" role="alert">{{ accountError }}</div> }
+    @if (store.error()) {
+    <div class="notice" role="alert">{{ store.error() }}<ion-button fill="clear"
+        (click)="store.connect()">Retry</ion-button></div>
+    }
+    @if (store.loading()) {
+    <div class="empty-state"><ion-spinner></ion-spinner>
+      <p>Loading your insights...</p>
+    </div>
+    }
+    @if (!store.loading()) {
+    <div class="stats-grid">
+      <article class="stat-card featured"><ion-icon name="library-outline"></ion-icon>
+        <p>Published stories</p>
+        <h2>{{ store.stories().length | number }}</h2><span>Ideas brought to life</span>
+      </article>
+      <article class="stat-card"><ion-icon name="eye-outline"></ion-icon>
+        <p>Total reads</p>
+        <h2>{{ totalReads | number }}</h2><span>Recorded across your library</span>
+      </article>
+      <article class="stat-card"><ion-icon name="star-outline"></ion-icon>
+        <p>Total votes</p>
+        <h2>{{ totalVotes | number }}</h2><span>Recorded story votes</span>
+      </article>
+      <article class="stat-card"><ion-icon name="checkmark-circle-outline"></ion-icon>
+        <p>Completed</p>
+        <h2>{{ completed | number }}</h2><span>{{ ongoing.length }} still unfolding</span>
+      </article>
+    </div>
+    <div class="insights-grid">
+      <section class="panel">
+        <div class="section-heading">
+          <h2>Stories in the spotlight</h2><span class="muted small">By recorded reads</span>
+        </div>@for (story of topStories; track story; let i = $index) {
+        <a class="ranking-row" [routerLink]="['/tabs/tab1']" [queryParams]="{edit: story.id}"><span class="rank">0{{ i +
+            1 }}</span><span class="mini-cover" [style.background]="story.coverColor"><ion-icon
+              name="book-outline"></ion-icon></span><span class="ranking-title"><strong>{{ story.title
+              }}</strong><small>{{ story.genre }} · {{ story.status }}</small></span><span class="read-count">{{
+            story.reads | number }}<small>reads</small></span></a>
+        }@if (!topStories.length) {
+        <div class="empty-state"><ion-icon name="book-outline"></ion-icon>
+          <h3>A story worth starting.</h3>
+          <p>Publish a story to see your library's activity here.</p><ion-button routerLink="/tabs/tab1">Start
+            writing</ion-button>
+        </div>
+        }
+      </section>
+      <section class="panel">
+        <div class="section-heading">
+          <h2>Your creative worlds</h2>
+        </div>
+        <p class="muted small">Stories by genre</p>@for (genre of genreBreakdown; track genre) {
+        <div class="genre-row">
+          <div><span>{{ genre.name }}</span><strong>{{ genre.count }}</strong></div>
+          <div class="progress-track" role="meter" [attr.aria-label]="genre.name + ' share of stories'"
+            aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="genre.percent"><span
+              [style.width.%]="genre.percent"></span></div>
+        </div>
+        }@if (!genreBreakdown.length) {
+        <p class="muted">Your genre breakdown will appear after your first story.</p>
+        }
+      </section>
+    </div>
+    <section class="panel continue-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">There's more to tell</p>
+          <h2>Pick up where you left off</h2>
+        </div><ion-button fill="clear" routerLink="/tabs/tab2">View library <ion-icon slot="end"
+            name="arrow-forward-outline"></ion-icon></ion-button>
+      </div>@for (story of ongoing; track story) {
+      <a class="continue-row" [routerLink]="['/tabs/tab1']" [queryParams]="{edit: story.id}"><ion-icon
+          name="create-outline"></ion-icon><span>{{ story.title }}<small>{{ story.author }}</small></span><span
+          class="status">Continue writing</span></a>
+      }@if (!ongoing.length) {
+      <p class="muted">No ongoing stories. A fresh page is waiting whenever you are.</p>
+      }
+    </section>
+    }
+  </main>
 </ion-content>

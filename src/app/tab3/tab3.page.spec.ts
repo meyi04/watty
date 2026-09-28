@@ -1,3 +1,6 @@
+import { AuthService } from '../auth.service';
+import { signal } from '@angular/core';
+import { StoryService } from '../story.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
@@ -10,6 +13,7 @@ describe('Tab3Page', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [{ provide: AuthService, useValue: { user: signal({ email: 'writer@example.com' }) } }, { provide: StoryService, useValue: { stories: signal([]), loading: signal(false), error: signal('') } }],
       imports: [Tab3PageModule, RouterModule.forRoot([])]
     }).compileComponents();
 

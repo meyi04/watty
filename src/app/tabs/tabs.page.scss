@@ -1,1 +1,128 @@
+.custom-tab-bar {
+  --background: rgba(250, 248, 244, 0.92);
+  border: 0;
+  border-top: 1px solid rgba(112, 101, 87, 0.12);
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  height: auto;
+  min-height: 88px;
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  backdrop-filter: blur(12px);
+}
 
+ion-tab-button {
+  --background: rgba(255, 255, 255, 0.78);
+  --background-focused: #f3e8df;
+  --color: #655b4e;
+  --color-selected: #ffffff;
+  flex: 0 1 160px;
+  min-width: 0;
+  max-width: 160px;
+  min-height: 58px;
+  border: 1px solid #d9cdbd;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(48, 45, 40, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+ion-tab-button.tab-selected {
+  --background: linear-gradient(135deg, #ad452c 0%, #bc563d 100%);
+  --background-focused: #983d27;
+  border-color: #ad452c;
+  box-shadow: 0 8px 18px rgba(173, 69, 44, 0.18);
+}
+
+ion-tab-button::part(native) {
+  padding: 8px 16px;
+  gap: 5px;
+}
+
+ion-tab-button ion-icon {
+  font-size: 21px;
+  margin: 0;
+}
+
+ion-tab-button ion-label {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
+}
+
+ion-tab-button:focus-within {
+  outline: 3px solid rgba(173, 69, 44, 0.22);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .custom-tab-bar {
+    gap: 8px;
+    padding-inline: 16px;
+    min-height: 84px;
+  }
+
+  ion-tab-button {
+    flex: 1 1 0;
+    max-width: 140px;
+  }
+}
+
+.auth-loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-shell {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 28px 18px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+}
+
+.auth-card h1 {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.auth-card ion-input {
+  margin: 24px 0;
+}
+
+.auth-card>ion-button {
+  margin: 24px 0 0;
+}
+
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.auth-actions ion-button {
+  white-space: normal;
+}
+
+.auth-message {
+  background: #e9f1e8;
+  color: #376444;
+  border-radius: 10px;
+  padding: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 24px;
+  }
+}

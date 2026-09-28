@@ -1,3 +1,5 @@
+import { signal } from '@angular/core';
+import { StoryService } from '../story.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
@@ -10,6 +12,7 @@ describe('Tab2Page', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [{ provide: StoryService, useValue: { stories: signal([]), loading: signal(false), error: signal('') } }],
       imports: [Tab2PageModule, RouterModule.forRoot([])]
     }).compileComponents();
 

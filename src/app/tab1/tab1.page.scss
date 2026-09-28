@@ -1,0 +1,304 @@
+.editor-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 28px;
+    align-items: start
+}
+
+.editor-panel {
+    padding: 28px
+}
+
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0
+}
+
+.field-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px
+}
+
+ion-input,
+ion-select,
+ion-textarea {
+    margin-bottom: 0
+}
+
+.preview-panel {
+    padding: 22px
+}
+
+.book-preview {
+    min-height: 345px;
+    padding: 28px;
+    color: #fff;
+    border-radius: 5px 14px 14px 5px;
+    box-shadow: inset 7px 0 0 #0002, 0 16px 25px #29251e20;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    overflow-wrap: anywhere
+}
+
+.cover-genre {
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    font-size: 10px
+}
+
+.cover-ornament {
+    font-size: 60px;
+    margin: 22px 0
+}
+
+.book-preview h2 {
+    font-family: Georgia, serif;
+    font-size: 29px;
+    line-height: 1.2;
+    margin: auto 0 24px
+}
+
+.book-preview p {
+    font-size: 11px;
+    letter-spacing: .12em
+}
+
+.swatches {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap
+}
+
+.swatches button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid white;
+    outline: 1px solid #dedbd5
+}
+
+.swatches button.selected {
+    outline: 2px solid #29251e
+}
+
+.writing-note {
+    display: flex;
+    gap: 12px;
+    padding: 24px 4px;
+    color: #665f54
+}
+
+.writing-note ion-icon {
+    font-size: 26px;
+    flex-shrink: 0
+}
+
+.writing-note h3 {
+    font-size: 14px;
+    margin: 0 0 8px
+}
+
+.writing-note p {
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0
+}
+
+@media(max-width:850px) {
+    .editor-layout {
+        grid-template-columns: 1fr
+    }
+
+    .editor-layout aside {
+        max-width: 440px;
+        width: 100%;
+        margin: auto
+    }
+}
+
+@media(max-width:450px) {
+    .field-grid {
+        grid-template-columns: 1fr;
+        gap: 0
+    }
+
+    .editor-panel {
+        padding: 18px
+    }
+}
+
+.form-section+.form-section {
+    border-top: 1px solid #e8e1d7;
+    margin-top: 28px;
+    padding-top: 28px;
+}
+
+.form-section .section-heading {
+    margin-bottom: 8px;
+}
+
+.field-help {
+    color: #776e62;
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0 0 20px;
+}
+
+.field-grid {
+    gap: 22px 16px;
+}
+
+.field-grid>* {
+    min-width: 0;
+    width: 100%;
+}
+
+.field-grid .select-wrap {
+    grid-column: 1 / -1;
+}
+
+.editor-footer {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid #e8e1d7;
+}
+
+.editor-footer .form-actions {
+    margin-top: 0;
+}
+
+.editor-layout>* {
+    min-width: 0;
+}
+
+@media (min-width: 851px) {
+    aside {
+        position: sticky;
+        top: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .field-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .editor-footer .form-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .editor-footer ion-button {
+        margin-inline: 0;
+    }
+}
+
+/* Keeps the trigger input consistent */
+.select-wrap {
+    display: block;
+    width: 100%;
+}
+
+.select-wrap ion-input {
+    width: 100%;
+    cursor: pointer;
+    --padding-start: 12px;
+    --padding-end: 12px;
+}
+
+.select-wrap ion-input::part(native) {
+    cursor: pointer;
+}
+
+/* Modal styling — centered, rounded, Wattpad-like card */
+.picker-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(41, 37, 30, 0.45);
+    z-index: 999;
+}
+
+.picker-dialog {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(92vw, 420px);
+    max-height: 72vh;
+    background: #fffaf5;
+    border-radius: 22px;
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
+    border: 1px solid #eee4d9;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.picker-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px 10px 18px;
+    border-bottom: 1px solid #efe7dc;
+    background: #fffaf5;
+}
+
+.picker-dialog-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #2d2a27;
+}
+
+.picker-dialog-header ion-button {
+    --padding-start: 4px;
+    --padding-end: 4px;
+    min-width: 36px;
+    min-height: 36px;
+}
+
+.picker-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 10px 14px;
+    max-height: min(60vh, 420px);
+    overflow-y: auto;
+    background: #fffaf5;
+}
+
+.picker-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #2d2a27;
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.picker-option:hover {
+    background: #fff2e8;
+    border-color: #f2dfce;
+}
+
+.picker-option.selected-option {
+    background: #ffe9dd;
+    border-color: #f7c8aa;
+    color: #ad452c;
+    font-weight: 700;
+}
+
+.picker-option ion-icon {
+    font-size: 1.2rem;
+}

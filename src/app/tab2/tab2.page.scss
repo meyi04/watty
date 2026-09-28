@@ -1,0 +1,347 @@
+:host {
+    --book-shadow: 0 18px 28px rgba(32, 24, 18, .14)
+}
+
+.library-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(180px, .7fr);
+    gap: 20px;
+    padding: 22px 24px;
+    margin: 12px 0 26px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .72), rgba(247, 238, 230, .9));
+    border: 1px solid #eadfce;
+    border-radius: 24px;
+    box-shadow: 0 12px 28px rgba(32, 24, 18, .04)
+}
+
+.library-hero h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(30px, 3vw, 42px);
+    letter-spacing: -.05em;
+    line-height: 1.04;
+    margin: 8px 0 12px
+}
+
+.library-hero p {
+    margin: 0 0 16px;
+    color: #665d54
+}
+
+.hero-books {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 150px
+}
+
+.decor-book {
+    position: relative;
+    width: 120px;
+    height: 150px;
+    padding: 18px 12px;
+    border-radius: 10px 16px 16px 10px;
+    box-shadow: var(--book-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    overflow: hidden
+}
+
+.decor-book.first {
+    background: linear-gradient(180deg, #9e4b34, #5d2d29);
+    transform: rotate(-10deg)
+}
+
+.decor-book.second {
+    background: linear-gradient(180deg, #4d5f48, #27372c);
+    transform: rotate(8deg)
+}
+
+.decor-book span {
+    align-self: center;
+    font-size: 22px
+}
+
+.library-heading {
+    margin-bottom: 18px
+}
+
+.library-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.count {
+    display: inline-flex;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: #f4e6dc;
+    color: #b5482d;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800
+}
+
+.filter-panel {
+    padding: 18px 18px 14px;
+    margin-bottom: 26px
+}
+
+.filter-panel .search-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    gap: 16px;
+    align-items: center
+}
+
+.genre-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px
+}
+
+.genre-filters button {
+    border: 1px solid #e1d3c4;
+    background: rgba(255, 255, 255, .7);
+    color: #4d443d;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer
+}
+
+.genre-filters button.active {
+    background: #ad452c;
+    border-color: #ad452c;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(173, 69, 44, .18)
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 18px
+}
+
+.story-card {
+    display: flex;
+    gap: 16px;
+    padding: 14px;
+    border: 1px solid #eadfce;
+    background: rgba(255, 255, 255, .82);
+    border-radius: 22px;
+    box-shadow: 0 12px 24px rgba(32, 24, 18, .05)
+}
+
+.story-cover {
+    position: relative;
+    width: 150px;
+    min-width: 150px;
+    height: 220px;
+    border: 0;
+    border-radius: 12px 18px 18px 12px;
+    padding: 12px 10px;
+    box-shadow: var(--book-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    color: #fff;
+    text-align: left;
+    overflow: hidden;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(0, 0, 0, .15))
+}
+
+.story-cover::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 12px;
+    background: rgba(0, 0, 0, .12);
+    border-radius: 12px 0 0 12px
+}
+
+.cover-spine {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 10px;
+    background: rgba(0, 0, 0, .08)
+}
+
+.cover-label,
+.cover-author,
+.cover-star,
+.story-cover strong {
+    position: relative;
+    z-index: 1
+}
+
+.cover-label {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    opacity: .9
+}
+
+.cover-star {
+    align-self: center;
+    font-size: 26px;
+    opacity: .9
+}
+
+.story-cover strong {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    line-height: 1.05;
+    letter-spacing: -.04em;
+    margin: 4px 0 8px
+}
+
+.cover-author {
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .9
+}
+
+.card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 4px 2px
+}
+
+.card-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px
+}
+
+.card-body h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -.04em
+}
+
+.byline {
+    margin: 0;
+    font-size: 13px;
+    color: #786d65
+}
+
+.synopsis {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #5c534d;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden
+}
+
+.story-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: #72695e
+}
+
+.story-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px
+}
+
+.story-meta ion-icon {
+    font-size: 14px
+}
+
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px
+}
+
+.mini-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px
+}
+
+.reader {
+    padding: 20px
+}
+
+.reader h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -.04em;
+    margin: 10px 0 6px
+}
+
+.reader-summary {
+    margin: 18px 0;
+    line-height: 1.7;
+    color: #594f48
+}
+
+.reader-text {
+    white-space: pre-wrap;
+    line-height: 1.9;
+    color: #332e2a
+}
+
+@media (max-width:780px) {
+    .library-hero {
+        grid-template-columns: 1fr
+    }
+
+    .hero-books {
+        justify-content: flex-start
+    }
+}
+
+@media (max-width:620px) {
+    .story-grid {
+        grid-template-columns: 1fr
+    }
+
+    .story-card {
+        flex-direction: column
+    }
+
+    .story-cover {
+        width: 100%;
+        min-width: 0;
+        height: 200px
+    }
+
+    .card-topline,
+    .card-actions {
+        align-items: flex-start
+    }
+}

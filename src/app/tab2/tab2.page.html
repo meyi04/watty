@@ -1,17 +1,150 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-header class="app-header"><ion-toolbar><ion-title><span class="brand-mark"
+        aria-hidden="true">w.</span><span>Library</span></ion-title><ion-buttons slot="end"><ion-button
+        routerLink="/tabs/tab1" aria-label="Write a story"><ion-icon slot="start" name="add-outline"
+          aria-hidden="true"></ion-icon><span class="header-action-label">Write a
+          story</span></ion-button></ion-buttons></ion-toolbar></ion-header>
+<ion-content>
+  <ion-refresher slot="fixed"
+    (ionRefresh)="handleRefresh($event)"><ion-refresher-content></ion-refresher-content></ion-refresher>
+  <main class="page-shell">
+    <section class="library-hero">
+      <div>
+        <p class="eyebrow">Your personal reading room</p>
+        <h1>One more page.<br>A whole new world.</h1>
+        <p>All your stories, in one little corner of the universe.</p><ion-button routerLink="/tabs/tab1">Create a story
+          <ion-icon slot="end" name="arrow-forward-outline"></ion-icon></ion-button>
+      </div>
+      <div class="hero-books" aria-hidden="true">
+        <div class="decor-book first">THE<br>UNWRITTEN<br><span>✦</span></div>
+        <div class="decor-book second">a world<br>of words<span>✧</span></div>
+      </div>
+    </section>
+    <div class="section-heading library-heading">
+      <div>
+        <p class="eyebrow">Find your next escape</p>
+        <h2>Your library <span class="count">{{ store.stories().length }}</span></h2>
+      </div><ion-button [fill]="savedOnly ? 'solid' : 'outline'" (click)="savedOnly = !savedOnly"
+        [attr.aria-pressed]="savedOnly"><ion-icon slot="start" name="bookmark-outline"></ion-icon>Saved</ion-button>
+    </div>
+    <section class="filter-panel panel" aria-label="Library filters">
+      <div class="search-row"><ion-searchbar aria-label="Search stories"
+          placeholder="Search titles, authors, or a little inspiration..." [(ngModel)]="searchTerm"
+          [debounce]="150"></ion-searchbar><ion-select mode="md" label="Sort stories" labelPlacement="stacked"
+          fill="outline" interface="popover" [(ngModel)]="sort"><ion-select-option value="newest">Newest
+            first</ion-select-option><ion-select-option value="title">Title A–Z</ion-select-option><ion-select-option
+            value="reads">Most read</ion-select-option></ion-select></div>
+      <div class="genre-filters" aria-label="Filter by genre">@for (genre of genres; track genre) {
+        <button (click)="selectedGenre = genre" [class.active]="selectedGenre === genre"
+          [attr.aria-pressed]="selectedGenre === genre">{{ genre }}</button>
+        }
+      </div>
+    </section>
+    @if (store.error()) {
+    <div class="notice" role="alert">{{ store.error() }} <ion-button fill="clear"
+        (click)="store.connect()">Retry</ion-button></div>
+    }
+    @if (store.loading()) {
+    <div class="empty-state"><ion-spinner></ion-spinner>
+      <p>Gathering your stories...</p>
+    </div>
+    }
+    @if (!store.loading()) {
+    <p class="muted small" aria-live="polite">{{ filteredStories.length }} {{ filteredStories.length === 1 ? 'story' :
+      'stories' }}{{ savedOnly ? ' saved on this device' : ' to explore' }}</p>
+    <div class="story-grid">
+      @for (story of filteredStories; track story) {
+      <article class="story-card">
+        <button class="story-cover" [style.background-color]="story.coverColor" (click)="selectedStory = story"
+          [attr.aria-label]="'Read ' + story.title">
+          <span class="cover-spine" aria-hidden="true"></span>
+          <span class="cover-label">{{ story.genre }}</span>
+          <span class="cover-star" aria-hidden="true">✦</span>
+          <strong>{{ story.title }}</strong>
+          <span class="cover-author">{{ story.author }}</span>
+        </button>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+        <div class="card-body">
+          <div class="card-topline">
+            <span class="status" [class.complete]="story.status === 'Completed'">{{ story.status }}</span>
+            <ion-button fill="clear" size="small" (click)="toggleSaved(story)"
+              [attr.aria-label]="(savedIds.includes(story.id) ? 'Unsave ' : 'Save ') + story.title"
+              [attr.aria-pressed]="savedIds.includes(story.id)">
+              <ion-icon slot="icon-only"
+                [name]="savedIds.includes(story.id) ? 'bookmark' : 'bookmark-outline'"></ion-icon>
+            </ion-button>
+          </div>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+          <h3>{{ story.title }}</h3>
+          <p class="byline">by {{ story.author }}</p>
+          <p class="synopsis">{{ story.description || 'A new story waiting to unfold.' }}</p>
+
+          <div class="story-meta">
+            <span><ion-icon name="eye-outline"></ion-icon>{{ story.reads | number }} reads</span>
+            <span><ion-icon name="star-outline"></ion-icon>{{ story.votes | number }} votes</span>
+          </div>
+
+          <div class="card-actions">
+            <ion-button fill="clear" size="small" (click)="selectedStory = story">Read story <ion-icon slot="end"
+                name="arrow-forward-outline"></ion-icon></ion-button>
+            <div class="mini-actions">
+              <ion-button fill="clear" size="small" [routerLink]="['/tabs/tab1']" [queryParams]="{edit: story.id}"
+                [attr.aria-label]="'Edit ' + story.title"><ion-icon slot="icon-only"
+                  name="create-outline"></ion-icon></ion-button>
+              <ion-button fill="clear" size="small" color="medium" [disabled]="!!deletingId"
+                (click)="deleteStory(story)" [attr.aria-label]="'Delete ' + story.title"><ion-icon slot="icon-only"
+                  name="trash-outline"></ion-icon></ion-button>
+            </div>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+    @if (!filteredStories.length && !store.error()) {
+    <div class="empty-state panel"><ion-icon name="library-outline"></ion-icon>
+      <h2>{{ store.stories().length ? 'No stories match just yet.' : 'Your bookshelf is a blank canvas.' }}</h2>
+      <p>{{ store.stories().length ? 'Try another genre, search, or save a story to read later.' : 'Write your first
+        story and watch your library come to life.' }}</p>@if (store.stories().length) {
+      <ion-button fill="outline" (click)="clearFilters()">Show all stories</ion-button>
+      }@if (!store.stories().length) {
+      <ion-button routerLink="/tabs/tab1">Write your first story</ion-button>
+      }
+    </div>
+    }
+    }
+  </main>
+  <ion-modal [isOpen]="!!selectedStory" (didDismiss)="selectedStory = undefined">
+    <ng-template><ion-header><ion-toolbar><ion-title>Reading room</ion-title><ion-buttons slot="end"><ion-button
+              (click)="selectedStory = undefined">Close</ion-button></ion-buttons></ion-toolbar></ion-header><ion-content>@if
+        (selectedStory; as story) {
+        <article class="reader">
+          <p class="eyebrow">{{ story.genre }} · {{ story.status }}</p>
+          <h1>{{ story.title }}</h1>
+          <p class="muted">by {{ story.author }}</p><ion-button fill="outline" size="small"
+            (click)="toggleSaved(story)">{{ savedIds.includes(story.id) ? 'Remove bookmark' : 'Save for later'
+            }}</ion-button>
+          <p class="reader-summary">{{ story.description }}</p>
+          <div class="reader-text">{{ story.content || 'The author has not added story text yet. Check back for the next
+            chapter.' }}</div>
+        </article>
+        }
+      </ion-content></ng-template>
+  </ion-modal>
+  <ion-modal class="delete-confirm-modal" [isOpen]="!!deleteCandidate" [backdropDismiss]="!deletingId"
+    (didDismiss)="cancelDelete()">
+    <ng-template>
+      <section class="delete-confirm" role="alertdialog" aria-modal="true" aria-labelledby="delete-title"
+        aria-describedby="delete-description">
+        <ion-icon name="trash-outline" aria-hidden="true"></ion-icon>
+        <h2 id="delete-title">Delete this story?</h2>
+        <p id="delete-description">{{ deleteCandidate?.title }} and its text will be permanently removed.</p>
+        <div class="delete-confirm-actions">
+          <ion-button fill="outline" [disabled]="!!deletingId" (click)="cancelDelete()">Keep story</ion-button>
+          <ion-button color="danger" [disabled]="!!deletingId" (click)="confirmDelete()">
+            @if (deletingId) { <ion-spinner slot="start" name="crescent"></ion-spinner> }
+            {{ deletingId ? 'Deleting...' : 'Delete story' }}
+          </ion-button>
+        </div>
+      </section>
+    </ng-template>
+  </ion-modal>
 </ion-content>

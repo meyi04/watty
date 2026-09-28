@@ -1,0 +1,145 @@
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:18px;
+  margin-bottom:28px
+}
+.stat-card {
+  padding:24px;
+  background:white;
+  border:1px solid #e5e0d7;
+  border-radius:16px
+}
+.stat-card ion-icon {
+  font-size:24px;
+  color:#b84e32
+}
+.stat-card p {
+  color:#70695e;
+  font-size:13px;
+  margin:22px 0 8px
+}
+.stat-card h2 {
+  font-size:38px;
+  margin:0 0 10px;
+  font-family:Georgia,serif
+}
+.stat-card span {
+  font-size:11px;
+  color:#82786b
+}
+.featured {
+  background:#2f453b;
+  color:white;
+  border-color:#2f453b
+}
+.featured p,.featured span,.featured ion-icon {
+  color:#dde7db
+}
+.insights-grid {
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:24px
+}
+.panel {
+  padding:26px
+}
+.ranking-row,.continue-row {
+  display:flex;
+  gap:14px;
+  align-items:center;
+  padding:17px 0;
+  border-top:1px solid #eee8e0;
+  text-decoration:none;
+  color:inherit
+}
+.rank {
+  color:#a99b87;
+  font-size:13px
+}
+.mini-cover {
+  width:36px;
+  height:48px;
+  border-radius:3px 7px 7px 3px;
+  display:grid;
+  place-items:center;
+  color:white;
+  flex-shrink:0
+}
+.ranking-title {
+  flex:1;
+  min-width:0
+}
+.ranking-title strong {
+  display:block;
+  font-size:14px;
+  overflow-wrap:anywhere
+}
+.ranking-row small,.continue-row small {
+  display:block;
+  color:#82786b;
+  font-size:11px;
+  margin-top:6px
+}
+.read-count {
+  text-align:right;
+  font-size:15px
+}
+.genre-row {
+  margin:24px 0
+}
+.genre-row>div:first-child {
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  margin-bottom:10px
+}
+.progress-track {
+  height:8px;
+  border-radius:8px;
+  background:#f0ebe2;
+  overflow:hidden
+}
+.progress-track span {
+  display:block;
+  height:100%;
+  background:#b84e32;
+  border-radius:8px
+}
+.continue-panel {
+  margin-top:24px
+}
+.continue-row>ion-icon {
+  color:#b84e32;
+  font-size:23px
+}
+.continue-row>span:nth-child(2) {
+  flex:1;
+  overflow-wrap:anywhere
+}
+.continue-row:hover,.ranking-row:hover {
+  background:#faf7f1
+}
+@media(max-width:800px) {
+  .stats-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  .insights-grid {
+    grid-template-columns:1fr
+  }
+}
+@media(max-width:450px) {
+  .panel,.stat-card {
+    padding:18px
+  }
+  .continue-panel .section-heading {
+    align-items:flex-start;
+    flex-direction:column
+  }
+  .continue-row {
+    flex-wrap:wrap
+  }
+  .stat-card h2 {
+    font-size:32px
+  }
+}

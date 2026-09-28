@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validStory(data) {
+      return data.keys().hasAll(['ownerId', 'title', 'author', 'genre', 'description', 'content', 'status', 'coverColor', 'reads', 'votes', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['ownerId', 'title', 'author', 'genre', 'description', 'content', 'status', 'coverColor', 'reads', 'votes', 'createdAt', 'updatedAt'])
+        && data.ownerId is string
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 120
+        && data.author is string && data.author.size() > 0 && data.author.size() <= 80
+        && data.genre in ['Romance', 'Fantasy', 'Mystery', 'Adventure', 'Sci-Fi', 'Horror']
+        && data.description is string && data.description.size() <= 2000
+        && data.content is string && data.content.size() <= 200000
+        && data.status in ['Ongoing', 'Completed']
+        && data.coverColor is string && data.coverColor.matches('#[0-9a-fA-F]{6}')
+        && data.reads is int && data.reads >= 0
+        && data.votes is int && data.votes >= 0
+        && data.createdAt is timestamp && data.updatedAt is timestamp;
+    }
+    match /stories/{storyId} {
+      allow read: if signedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.ownerId == request.auth.uid
+        && validStory(request.resource.data)
+        && request.resource.data.reads == 0 && request.resource.data.votes == 0
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if signedIn()
+        && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId
+        && validStory(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'author', 'genre', 'description', 'content', 'status', 'coverColor', 'updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if signedIn() && resource.data.ownerId == request.auth.uid;
+    }
+  }
+}
